@@ -17,7 +17,8 @@ browser workers), as a separate file, unmodified after the build.
   BRep_Builder, BRepTools_History, BRepTools_ReShape, BRepClass3d_SolidClassifier, ShapeFix_Shape,
   ShapeAnalysis_FreeBounds, BRepLProp_SLProps, GeomLProp_SLProps, Law_Constant, TopExp,
   TopTools_IndexedDataMapOfShapeListOfShape, STEPCAFControl_Reader; and (1 Nov, second build) gp_Lin,
-  BRepClass3d_SClassifier, BRepOffset_Status.
+  BRepClass3d_SClassifier, BRepOffset_Status; and (20 Nov, third build) BRepBuilderAPI_GTransform (non-uniform scale
+  and the ellipsoid, feedback F37; its gp_GTrsf and BRepBuilderAPI_ModifyShape were bound already).
 - `wrappers/*.cpp` are replicad's helpers (mesh and edge extraction, hashing, B-rep I/O), unchanged, and Rebel CAD's
   own `wrappers/face-offset.cpp` (RebelFaceOffset: BRepOffset_MakeOffset with an offset per face, for move face on
   curved faces; the class itself has no compiled binding in the image, nor has DESTEP_Parameters).
@@ -54,5 +55,12 @@ OCCT's own files at the commit above, unchanged; the notices carry them in full.
   edge names).
 - The first build (1 Nov 2026): wasm sha256 `e4d8438f2fe542a40d7779833cdb68861f6130cdc3db2ddca2c96c2fc4b332de`,
   23 546 310 bytes (replicad's: 22 980 267).
-- This build (1 Nov 2026, afternoon): wasm sha256 `053df75ba55af2389a32bf8b93a407635362ea384b6e19a742d0d4c15b62eccf`,
+- The second build (1 Nov 2026, afternoon): wasm sha256 `053df75ba55af2389a32bf8b93a407635362ea384b6e19a742d0d4c15b62eccf`,
   23 554 429 bytes.
+- This build (20 Nov 2026): wasm sha256 `9e186b81d39ae47d08d2d2e5b61d820bbd4ab9c0beb265ffd970d91ae9eb2518`,
+  23 610 334 bytes; `rebel_occt.js` byte for byte the second build's. A first try showed that a new build moves
+  whatever the kernel names by OCC's order of things: the two saved projects with a closed shell swapped their inner
+  faces' names (`<shell>:inner<n>`, the offset's order, which follows where the wasm's memory puts things). Those are
+  named from the offset's history now (the commit before this build's); with that, all 130 saved projects regenerated
+  the same with this build as with the second (statuses, solids, volumes, face and edge names), before any kernel code
+  used the new class.
